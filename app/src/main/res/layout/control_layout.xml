@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:screenOrientation="landscape">
+
+    <TextView
+            android:text="prosto"
+            android:layout_width="215dp"
+            android:layout_height="58dp"
+            android:id="@+id/textView2" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.407"
+            android:textSize="24sp" android:textAlignment="center"/>
+    <ImageButton
+            android:layout_width="85dp"
+            android:layout_height="91dp" app:srcCompat="@drawable/left"
+            android:id="@+id/turn_left_button"
+            style="@android:style/Widget.Material.ImageButton" android:scaleType="centerInside"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:srcCompat="@drawable/left" app:layout_constraintVertical_bias="0.858" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/turn_right_button" app:layout_constraintHorizontal_bias="0.98"
+            android:contentDescription="@string/turn_left"/>
+    <ImageButton
+            android:layout_width="85dp"
+            android:layout_height="91dp" app:srcCompat="@drawable/right"
+            android:id="@+id/turn_right_button"
+            style="@android:style/Widget.Material.ImageButton" android:scaleType="centerInside"
+            android:layout_marginEnd="28dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:srcCompat="@drawable/right" app:layout_constraintVertical_bias="0.858"
+            android:contentDescription="@string/turn_right"/>
+    <ImageButton
+            android:layout_width="85dp"
+            android:layout_height="91dp" app:srcCompat="@drawable/up"
+            android:id="@+id/go_forward"
+            style="@android:style/Widget.Material.ImageButton" android:scaleType="centerInside"
+            android:layout_marginStart="16dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.858" android:contentDescription="@string/go_forward"/>
+    <ImageButton
+            android:layout_width="85dp"
+            android:layout_height="91dp" app:srcCompat="@drawable/down"
+            android:id="@+id/go_backward"
+            style="@android:style/Widget.Material.ImageButton" android:scaleType="centerInside"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/go_forward" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.03" tools:srcCompat="@drawable/down"
+            android:contentDescription="@string/go_backward" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.858"/>
+    <Switch
+            android:text="@string/lights"
+            android:layout_width="121dp"
+            android:layout_height="50dp"
+            android:id="@+id/lights_switch" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.136"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/btn_dialog"
+            android:id="@+id/disconnect_button" app:layout_constraintStart_toEndOf="@+id/lights_switch"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.948" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.133"
+            android:contentDescription="@string/disconnect"/>
+    <TextView
+            android:text="Nie jedziesz"
+            android:layout_width="215dp"
+            android:layout_height="58dp"
+            android:id="@+id/textView" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.499" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.287"
+            android:textSize="24sp" android:textAlignment="center"/>
+</android.support.constraint.ConstraintLayout>

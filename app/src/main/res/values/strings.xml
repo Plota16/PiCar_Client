@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PiCar</string>
+    <string name="turn_left">turn left</string>
+    <string name="turn_right">turn right</string>
+    <string name="go_backward">go backward</string>
+    <string name="go_forward">go forward</string>
+    <string name="lights">Lights</string>
+    <string name="disconnect">Disconnect</string>
+</resources>
