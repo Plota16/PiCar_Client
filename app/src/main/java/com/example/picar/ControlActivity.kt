@@ -12,6 +12,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import java.util.*
 import android.bluetooth.BluetoothSocket
+import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.Log
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.IOException
@@ -26,7 +31,28 @@ import android.view.View.OnTouchListener
 
 
 @Suppress("DEPRECATION")
-class ControlActivity : AppCompatActivity() {
+open class ControlActivity : AppCompatActivity(), SensorEventListener  {
+
+
+    lateinit var sensorManager: SensorManager
+    override fun onSensorChanged(event: SensorEvent?) {
+        val orientations = orientationToDegree(event!!)
+        if(rotation_switch.isChecked)
+        {
+
+            if(orientations[2] > -60) {
+                Car(window,textView2).turn_right()
+            } else if(orientations[2] < -105) {
+                Car(window,textView2).turn_left()
+            } else if(orientations[2] > -100 && orientations[2] < -80 ) {
+                Car(window,textView2).go_straight()
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
+    }
 
     companion object {
         var m_myUUID: UUID = UUID.fromString("52d82dc4-3628-4b3e-ae69-a1fec1384e4f")
@@ -43,6 +69,13 @@ class ControlActivity : AppCompatActivity() {
         m_address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS)
 
         ConnectToDevice(this).execute()
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorManager.registerListener(
+            this,
+            sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
 
         lights_switch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
@@ -85,12 +118,10 @@ class ControlActivity : AppCompatActivity() {
         turn_left_button.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
-                    textView2.text = "skręcasz w lewo"
-                    sendCommand("go_back")
+                    Car(window,textView2).turn_left()
                 }
                 else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                    textView2.text = "prosto"
-                    sendCommand("left")
+                    Car(window,textView2).go_straight()
                 }
                 return false
             }
@@ -99,12 +130,10 @@ class ControlActivity : AppCompatActivity() {
         turn_right_button.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
-                    textView2.text = "skręcasz w prawo"
-                    sendCommand("go_back")
+                    Car(window,textView2).turn_right()
                 }
                 else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                    textView2.text = "prosto"
-                    sendCommand("right")
+                    Car(window,textView2).go_straight()
                 }
                 return false
             }
@@ -113,7 +142,7 @@ class ControlActivity : AppCompatActivity() {
         disconnect_button.setOnClickListener { disconnect() }
     }
 
-    private fun sendCommand(input: String) {
+    internal fun sendCommand(input: String) {
         if (m_bluetoothSocket != null) {
             try{
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
@@ -136,44 +165,26 @@ class ControlActivity : AppCompatActivity() {
         finish()
     }
 
-    private class ConnectToDevice(c: Context) : AsyncTask<Void, Void, String>() {
-        private var connectSuccess: Boolean = true
-        @SuppressLint("StaticFieldLeak")
-        private val context: Context
+    private fun orientationToDegree(event : SensorEvent): FloatArray {
+        val rotationMatrix = FloatArray(16)
+        SensorManager.getRotationMatrixFromVector(
+            rotationMatrix, event!!.values
+        )
+        val remappedRotationMatrix = FloatArray(16)
+        SensorManager.remapCoordinateSystem(
+            rotationMatrix,
+            SensorManager.AXIS_X,
+            SensorManager.AXIS_Z,
+            remappedRotationMatrix
+        )
 
-        init {
-            this.context = c
+        val orientations = FloatArray(3)
+        SensorManager.getOrientation(remappedRotationMatrix, orientations)
+        for (i in 0..2) {
+            orientations[i] = Math.toDegrees(orientations[i].toDouble()).toFloat()
         }
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            m_progress = ProgressDialog.show(context, "Connecting...", "please wait")
-        }
-
-        override fun doInBackground(vararg p0: Void?): String? {
-            try {
-                if (m_bluetoothSocket == null || !m_isConnected) {
-                    m_bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-                    val device: BluetoothDevice = m_bluetoothAdapter.getRemoteDevice(m_address)
-                    m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(m_myUUID)
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery()
-                    m_bluetoothSocket!!.connect()
-                }
-            } catch (e: IOException) {
-                connectSuccess = false
-                e.printStackTrace()
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            if (!connectSuccess) {
-                Log.i("data", "couldn't connect")
-            } else {
-                m_isConnected = true
-            }
-            m_progress.dismiss()
-        }
+        return orientations
     }
+
+
 }
